@@ -425,8 +425,8 @@
     <div class="settings-panel" id="settings-panel">
       <div class="setting-row">
         <span class="setting-label">Velocidade</span>
-        <input type="range" id="rate-slider" min="0.5" max="1.8" step="0.05" value="0.92" oninput="updateSetting('rate',this.value)">
-        <span class="setting-value" id="rate-val">0.92×</span>
+        <input type="range" id="rate-slider" min="0.5" max="1.8" step="0.05" value="1.10" oninput="updateSetting('rate',this.value)">
+        <span class="setting-value" id="rate-val">1.10×</span>
       </div>
       <div class="setting-row">
         <span class="setting-label">Tom</span>
@@ -512,7 +512,8 @@ var audioChunks = [];
 var audioBlob = null;
 var lastSession = null;
 
-var voiceRate = 0.92;
+var voiceRate = 1.10;
+var savedVoiceName = 'antonio';
 var voicePitch = 1.0;
 var selectedVoice = null;
 var availableVoices = [];
@@ -525,7 +526,9 @@ window.onload = function() {
   var sr = localStorage.getItem('valter_rate');
   var sp = localStorage.getItem('valter_pitch');
   if (sr) { voiceRate = parseFloat(sr); document.getElementById('rate-slider').value = voiceRate; document.getElementById('rate-val').textContent = voiceRate.toFixed(2)+'x'; }
+  else { document.getElementById('rate-slider').value = 1.10; document.getElementById('rate-val').textContent = '1.10x'; }
   if (sp) { voicePitch = parseFloat(sp); document.getElementById('pitch-slider').value = voicePitch; document.getElementById('pitch-val').textContent = voicePitch.toFixed(2); }
+  savedVoiceName = localStorage.getItem('valter_voice_name') || 'antonio';
 
   // Check if we have a token (returned from Google OAuth)
   var hash = window.location.hash;
@@ -763,14 +766,22 @@ function populateVoiceSelect() {
     opt.textContent = v.name + ' (' + v.lang + ')';
     sel.appendChild(opt);
   });
-  sel.value = 0;
-  selectedVoice = ptVoices[0];
+  // Prefer saved voice name, fallback to Antonio
+  var antonioIdx = 0;
+  var preferName = savedVoiceName || 'antonio';
+  ptVoices.forEach(function(v, i) {
+    if (v.name.toLowerCase().indexOf(preferName) !== -1) antonioIdx = i;
+    else if (preferName !== 'antonio' && v.name.toLowerCase().indexOf('antonio') !== -1 && antonioIdx === 0) antonioIdx = i;
+  });
+  sel.value = antonioIdx;
+  selectedVoice = ptVoices[antonioIdx];
   sel._ptVoices = ptVoices;
 }
 function updateVoice() {
   var sel = document.getElementById('voice-select');
   var voices = sel._ptVoices || availableVoices;
   selectedVoice = voices[parseInt(sel.value)] || null;
+  if (selectedVoice) localStorage.setItem('valter_voice_name', selectedVoice.name.toLowerCase());
 }
 function updateSetting(type, val) {
   val = parseFloat(val);
