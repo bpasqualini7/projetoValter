@@ -327,6 +327,97 @@
   .ornament { text-align: center; color: var(--sepia-light); font-size: 18px; letter-spacing: 8px; margin: 28px 0; user-select: none; }
   footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--sepia-light); letter-spacing: 1px; border-top: 1px solid var(--sepia-light); padding-top: 18px; }
 
+
+  /* Session name */
+  .session-name-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--sepia-pale);
+    border: 1px solid var(--sepia-light);
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .session-name-bar label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    white-space: nowrap;
+  }
+  .session-name-bar input[type="text"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--sepia-light);
+    background: white;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink);
+    outline: none;
+  }
+  .session-name-bar input[type="text"]:focus { border-color: var(--sepia); }
+
+  /* Mic permission warning */
+  #mic-warning {
+    display: none;
+    background: var(--red-accent);
+    color: white;
+    padding: 10px 20px;
+    font-size: 13px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  #mic-warning.show { display: block; }
+
+  /* History panel */
+  .history-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: none; border: none;
+    color: var(--sepia); font-family: 'Crimson Pro', serif;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; padding: 8px 0; margin-top: 8px;
+    transition: color 0.2s;
+  }
+  .history-toggle:hover { color: var(--ink); }
+  .history-toggle .arrow { transition: transform 0.25s; font-size: 10px; }
+  .history-toggle.open .arrow { transform: rotate(180deg); }
+
+  .history-panel {
+    display: none;
+    border: 1px solid var(--sepia-light);
+    background: white;
+    margin-bottom: 24px;
+  }
+  .history-panel.open { display: block; }
+  .history-header {
+    padding: 11px 20px;
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--sepia-light);
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--sepia);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .history-empty { padding: 24px 20px; text-align: center; font-style: italic; color: var(--sepia-light); font-size: 14px; }
+  .history-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--sepia-pale);
+    display: flex; align-items: center; gap: 16px;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-item:hover { background: var(--sepia-pale); }
+  .history-item .hi-name { flex: 1; font-style: italic; color: var(--ink); }
+  .history-item .hi-meta { font-size: 12px; color: var(--sepia); white-space: nowrap; }
+  .history-item .hi-status {
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid var(--sepia-light); color: var(--sepia);
+  }
+  .history-item .hi-status.pendente { border-color: var(--amber); color: var(--amber); }
+  .history-item .hi-status.concluido { border-color: var(--green); color: var(--green); }
+
   @media (max-width: 600px) {
     .agent-card { flex-wrap: wrap; }
     .agent-status { margin-left: 0; }
@@ -413,6 +504,13 @@
 
     <div id="paused-banner">⏸ Sessão pausada — clique em Retomar quando estiver pronto</div>
 
+    <div id="mic-warning">⚠ Permissão de microfone negada. Clique no ícone 🔒 na barra do navegador e permita o microfone.</div>
+
+    <div class="session-name-bar">
+      <label>Nome da história</label>
+      <input type="text" id="session-name-input" placeholder="Ex: O paciente do silêncio..." maxlength="80">
+    </div>
+
     <div class="conversation-wrap">
       <div class="conversation-header">Conversa</div>
       <div id="conversation"></div>
@@ -453,6 +551,18 @@
     <div id="saving-indicator"><span class="spinner"></span> Salvando no Google Sheets...</div>
 
     <div class="ornament">✦ ✦ ✦</div>
+
+    <button class="history-toggle" id="history-toggle" onclick="toggleHistory()">
+      <span class="arrow">▼</span>&nbsp; Histórico de sessões
+    </button>
+    <div class="history-panel" id="history-panel">
+      <div class="history-header">
+        <span>Sessões salvas neste dispositivo</span>
+        <span id="history-count" style="font-size:12px;color:var(--sepia-light);">0 sessões</span>
+      </div>
+      <div id="history-list"></div>
+    </div>
+
     <footer>Projeto Valter · Cronista da Alma · Sprint 2</footer>
   </div>
 
@@ -621,11 +731,31 @@ function showMain() {
   showScreen('main');
   var now = new Date();
   document.getElementById('session-date').textContent = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
-  initSpeechRecognition();
   loadVoices();
   ensureSheetHeaders();
   getOrCreateDriveFolder();
-  startGreeting();
+  loadHistory();
+  // Request mic permission first, then init everything
+  requestMicPermission(function(granted) {
+    if (!granted) {
+      document.getElementById('mic-warning').classList.add('show');
+    }
+    initSpeechRecognition();
+    startGreeting();
+  });
+}
+
+function requestMicPermission(callback) {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    callback(false); return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream) {
+      // Keep stream reference for MediaRecorder later
+      window._micStream = stream;
+      callback(true);
+    })
+    .catch(function() { callback(false); });
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -635,7 +765,7 @@ function ensureSheetHeaders() {
   // Check if header row exists; if not, create it
   sheetsGet('A1:I1', function(rows) {
     if (!rows || !rows[0] || !rows[0][0]) {
-      var headers = [['ID','Data','Duração','Trocas','Status','Usuário','Transcript','Áudio Drive URL','Roteiro']];
+      var headers = [['ID','Nome da História','Data','Duração','Trocas','Status','Usuário','Transcript','Áudio Drive URL','Roteiro']];
       sheetsAppend(headers, function() {});
     }
   });
@@ -649,6 +779,7 @@ function saveSessionToSheets(session, audioUrl, callback) {
 
   var row = [[
     session.id,
+    session.nome || '',
     session.data_formatada,
     session.duracao,
     session.trocas,
@@ -676,7 +807,7 @@ function sheetsGet(range, callback) {
 }
 
 function sheetsAppend(values, callback) {
-  fetch('https://sheets.googleapis.com/v4/spreadsheets/' + SHEETS_ID + '/values/A1:I1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS', {
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/' + SHEETS_ID + '/values/A1:J1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS', {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
     body: JSON.stringify({ values: values })
@@ -840,12 +971,15 @@ function startRecording() {
   setStatus('Ouvindo', 'ouvindo');
   try { recognition.start(); } catch(e) {}
 
-  if (navigator.mediaDevices && !mediaRecorder) {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-      mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.ondataavailable = function(e) { audioChunks.push(e.data); };
-      mediaRecorder.start();
-    }).catch(function(){});
+  if (!mediaRecorder) {
+    var stream = window._micStream;
+    if (stream) {
+      try {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function(e) { if (e.data && e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.start(1000); // collect every 1s for reliability
+      } catch(e) { console.warn('MediaRecorder error:', e); }
+    }
   }
 
   if (!sessionStart) {
@@ -1042,8 +1176,12 @@ function endSession() {
 
   clearInterval(timerInterval);
 
+  var sessionNameVal = document.getElementById('session-name-input').value.trim()
+    || ('Sessão de ' + new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }));
+
   lastSession = {
     id: 'sessao_' + Date.now(),
+    nome: sessionNameVal,
     data: new Date().toISOString(),
     data_formatada: new Date().toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
     duracao: document.getElementById('session-timer').textContent,
@@ -1082,6 +1220,8 @@ function endSession() {
       document.getElementById('pause-icon').textContent = '⏸';
       document.getElementById('pause-label').textContent = 'Pausar';
       isPaused = false;
+      resetSessionName();
+      loadHistory();
       addMessage('agent', 'Sessão encerrada e salva. Quando quiser contar outra história, é só começar!');
     });
   }
@@ -1115,6 +1255,40 @@ function downloadAudio() {
   var a = document.createElement('a');
   a.href = url; a.download = 'valter_audio_' + lastSession.id + '.webm'; a.click();
   URL.revokeObjectURL(url);
+}
+
+// ── HISTORY ──────────────────────────────────────────────────────────────────
+function toggleHistory() {
+  document.getElementById('history-toggle').classList.toggle('open');
+  document.getElementById('history-panel').classList.toggle('open');
+  loadHistory();
+}
+
+function loadHistory() {
+  var sessions = JSON.parse(localStorage.getItem('valter_sessions') || '[]');
+  var list = document.getElementById('history-list');
+  var countEl = document.getElementById('history-count');
+  if (!list) return;
+  countEl.textContent = sessions.length + ' sessão' + (sessions.length !== 1 ? 'ões' : '');
+  if (!sessions.length) {
+    list.innerHTML = '<div class="history-empty">Nenhuma sessão registrada ainda.</div>';
+    return;
+  }
+  // Show newest first
+  var reversed = sessions.slice().reverse();
+  list.innerHTML = reversed.map(function(s) {
+    return '<div class="history-item">' +
+      '<div class="hi-name">' + (s.nome || 'Sem título') + '</div>' +
+      '<div class="hi-meta">' + (s.data_formatada || s.data || '') + ' &nbsp;·&nbsp; ' + (s.duracao || '—') + ' &nbsp;·&nbsp; ' + (s.trocas || 0) + ' trocas</div>' +
+      '<div class="hi-status ' + (s.status || 'pendente') + '">' + (s.status || 'pendente') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// Reset session name field after save
+function resetSessionName() {
+  var el = document.getElementById('session-name-input');
+  if (el) el.value = '';
 }
 </script>
 </body>
