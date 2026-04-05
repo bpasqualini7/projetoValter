@@ -328,6 +328,15 @@
   footer { margin-top: 40px; text-align: center; font-size: 12px; color: var(--sepia-light); letter-spacing: 1px; border-top: 1px solid var(--sepia-light); padding-top: 18px; }
 
 
+  /* Pause delay setting */
+  .setting-hint {
+    font-size: 11px;
+    color: var(--sepia-light);
+    font-style: italic;
+    margin-top: -8px;
+    padding-left: 0;
+  }
+
   /* Session name */
   .session-name-bar {
     display: flex;
@@ -536,6 +545,12 @@
         <select id="voice-select" onchange="updateVoice()"><option value="">Carregando...</option></select>
         <button class="btn-test-voice" onclick="testVoice()">▶ Testar</button>
       </div>
+      <div class="setting-row">
+        <span class="setting-label">Pausa antes de responder</span>
+        <input type="range" id="delay-slider" min="1" max="8" step="0.5" value="2.5" oninput="updateSetting('delay',this.value)">
+        <span class="setting-value" id="delay-val">2.5s</span>
+      </div>
+      <p class="setting-hint">Tempo que O Curioso aguarda após o Valter parar de falar antes de responder.</p>
     </div>
 
     <div class="controls">
@@ -624,6 +639,8 @@ var lastSession = null;
 
 var voiceRate = 1.10;
 var savedVoiceName = 'antonio';
+var responseDelay = 2500; // ms — default 2.5s
+var pendingSpeechTimer = null;
 var voicePitch = 1.0;
 var selectedVoice = null;
 var availableVoices = [];
@@ -639,6 +656,7 @@ window.onload = function() {
   else { document.getElementById('rate-slider').value = 1.10; document.getElementById('rate-val').textContent = '1.10x'; }
   if (sp) { voicePitch = parseFloat(sp); document.getElementById('pitch-slider').value = voicePitch; document.getElementById('pitch-val').textContent = voicePitch.toFixed(2); }
   savedVoiceName = localStorage.getItem('valter_voice_name') || 'antonio';
+  var sd = localStorage.getItem('valter_delay'); if (sd) { responseDelay = parseFloat(sd)*1000; document.getElementById('delay-slider').value = parseFloat(sd); document.getElementById('delay-val').textContent = parseFloat(sd).toFixed(1)+'s'; } else { document.getElementById('delay-slider').value = 2.5; document.getElementById('delay-val').textContent = '2.5s'; }
 
   // Check if we have a token (returned from Google OAuth)
   var hash = window.location.hash;
@@ -916,8 +934,19 @@ function updateVoice() {
 }
 function updateSetting(type, val) {
   val = parseFloat(val);
-  if (type === 'rate') { voiceRate = val; document.getElementById('rate-val').textContent = val.toFixed(2)+'x'; localStorage.setItem('valter_rate', val); }
-  else { voicePitch = val; document.getElementById('pitch-val').textContent = val.toFixed(2); localStorage.setItem('valter_pitch', val); }
+  if (type === 'rate') {
+    voiceRate = val;
+    document.getElementById('rate-val').textContent = val.toFixed(2)+'x';
+    localStorage.setItem('valter_rate', val);
+  } else if (type === 'pitch') {
+    voicePitch = val;
+    document.getElementById('pitch-val').textContent = val.toFixed(2);
+    localStorage.setItem('valter_pitch', val);
+  } else if (type === 'delay') {
+    responseDelay = val * 1000;
+    document.getElementById('delay-val').textContent = val.toFixed(1)+'s';
+    localStorage.setItem('valter_delay', val);
+  }
 }
 function testVoice() {
   synthesis.cancel();
@@ -943,6 +972,8 @@ function initSpeechRecognition() {
   recognition.continuous = true;
   recognition.interimResults = true;
 
+  var accumulatedSpeech = '';
+
   recognition.onresult = function(e) {
     if (isPaused) return;
     var interim = '', final = '';
@@ -950,8 +981,21 @@ function initSpeechRecognition() {
       if (e.results[i].isFinal) final += e.results[i][0].transcript;
       else interim += e.results[i][0].transcript;
     }
-    document.getElementById('live-transcript').textContent = interim || final || 'Ouvindo...';
-    if (final) handleUserSpeech(final.trim());
+    if (final) accumulatedSpeech += (accumulatedSpeech ? ' ' : '') + final.trim();
+    document.getElementById('live-transcript').textContent = interim || (accumulatedSpeech ? accumulatedSpeech + '...' : 'Ouvindo...');
+
+    // Clear any pending timer — Valter is still talking
+    if (pendingSpeechTimer) { clearTimeout(pendingSpeechTimer); pendingSpeechTimer = null; }
+
+    if (final && accumulatedSpeech.length > 0) {
+      // Wait responseDelay ms of silence before sending
+      var speechToSend = accumulatedSpeech;
+      pendingSpeechTimer = setTimeout(function() {
+        pendingSpeechTimer = null;
+        accumulatedSpeech = '';
+        handleUserSpeech(speechToSend);
+      }, responseDelay);
+    }
   };
 
   recognition.onerror = function(e) { if (e.error !== 'no-speech') setStatus('Pronto', ''); };
@@ -990,6 +1034,7 @@ function startRecording() {
 
 function stopRecording() {
   isRecording = false;
+  if (pendingSpeechTimer) { clearTimeout(pendingSpeechTimer); pendingSpeechTimer = null; }
   document.getElementById('mic-btn').classList.remove('recording');
   document.getElementById('mic-label').textContent = 'Iniciar — Falar com O Curioso';
   setStatus('Pronto', '');
