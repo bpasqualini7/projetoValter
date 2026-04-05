@@ -1813,17 +1813,10 @@ function selectTone(el) {
 
 function gerarRoteiro() {
   if (!selectedSession) return;
-  var transcriptText = selectedSession.transcript_raw.replace(/ \| /g, '
-');
-  var prompt = 'Esta e a transcricao de uma conversa em que o psicanalista Valter conta uma historia clinica:
-
-' +
-    transcriptText + '
-
-' + TONE_PROMPTS[selectedTone] +
-    '
-
-IMPORTANTE: Preserve o sigilo — nao mencione nomes reais de pacientes. Use "o paciente", "ela", "ele" ou um nome ficticio.';
+  var transcriptText = selectedSession.transcript_raw.replace(/ \| /g, '\n');
+  var intro = 'Esta e a transcricao de uma conversa em que o psicanalista Valter conta uma historia clinica:';
+  var instrucao = 'IMPORTANTE: Preserve o sigilo. Nao mencione nomes reais. Use o paciente, ela, ele ou nome ficticio.';
+  var prompt = intro + ' ' + transcriptText + ' ' + TONE_PROMPTS[selectedTone] + ' ' + instrucao;
 
   document.getElementById('roteiro-generating').classList.add('show');
   document.getElementById('roteiro-output').classList.remove('show');
@@ -1890,13 +1883,7 @@ function salvarRoteiro() {
 function downloadRoteiro() {
   var roteiro = document.getElementById('roteiro-output').value;
   if (!roteiro || !selectedSession) return;
-  var header = 'PROJETO VALTER - ROTEIRO
-========================
-Historia: ' + selectedSession.nome + '
-Data: ' + selectedSession.data_formatada + '
-Tom: ' + selectedTone + '
-
-';
+  var header = 'PROJETO VALTER - ROTEIRO\n========================\nHistoria: ' + selectedSession.nome + ' Data: ' + selectedSession.data_formatada + ' Tom: ' + selectedTone + '\n\n';
   var blob = new Blob([header + roteiro], { type: 'text/plain;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
