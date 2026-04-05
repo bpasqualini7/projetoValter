@@ -427,6 +427,262 @@
   .history-item .hi-status.pendente { border-color: var(--amber); color: var(--amber); }
   .history-item .hi-status.concluido { border-color: var(--green); color: var(--green); }
 
+
+  /* ── EDITOR SCREEN ─────────────────────────────────────────── */
+  #screen-editor { display: none; }
+
+  .editor-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 2px solid var(--sepia-light);
+    margin-bottom: 32px;
+  }
+  .editor-tab {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .editor-tab:hover { color: var(--ink); }
+  .editor-tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 400; }
+
+  .editor-panel { display: none; }
+  .editor-panel.active { display: block; }
+
+  /* Back button */
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    cursor: pointer;
+    margin-bottom: 28px;
+    padding: 0;
+    transition: color 0.2s;
+  }
+  .btn-back:hover { color: var(--ink); }
+
+  /* Pending list */
+  .pending-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .pending-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+  }
+  .pending-header h2 em { font-style: italic; color: var(--sepia); }
+
+  .pending-empty {
+    text-align: center;
+    padding: 48px 20px;
+    font-style: italic;
+    color: var(--sepia-light);
+    font-size: 16px;
+    border: 1px dashed var(--sepia-light);
+  }
+
+  .pending-item {
+    border: 1px solid var(--sepia-light);
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .pending-item:hover { border-color: var(--sepia); }
+  .pending-item.selected { border-color: var(--ink); border-width: 2px; }
+
+  .pending-item-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--paper-dark);
+  }
+  .pending-item-name {
+    flex: 1;
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+  }
+  .pending-item-meta {
+    font-size: 12px;
+    color: var(--sepia);
+    text-align: right;
+    line-height: 1.6;
+  }
+  .badge {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid;
+  }
+  .badge-pendente { border-color: var(--amber); color: var(--amber); }
+  .badge-concluido { border-color: var(--green); color: var(--green); }
+
+  .pending-item-body {
+    display: none;
+    padding: 20px;
+    border-top: 1px solid var(--sepia-light);
+  }
+  .pending-item.open .pending-item-body { display: block; }
+
+  .transcript-box {
+    background: white;
+    border: 1px solid var(--sepia-light);
+    padding: 20px;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .transcript-box::-webkit-scrollbar { width: 4px; }
+  .transcript-box::-webkit-scrollbar-thumb { background: var(--sepia-light); }
+  .transcript-line { margin-bottom: 12px; }
+  .transcript-role {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 2px;
+  }
+  .transcript-role.curioso { color: var(--sepia); }
+  .transcript-role.valter { color: var(--ink); font-weight: 600; }
+  .transcript-text { color: var(--ink); }
+  .transcript-text.curioso { font-style: italic; }
+
+  /* Tone selector */
+  .tone-section { margin-bottom: 20px; }
+  .tone-section label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 12px;
+  }
+  .tone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+  }
+  .tone-option {
+    padding: 14px 16px;
+    border: 1px solid var(--sepia-light);
+    background: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .tone-option:hover { border-color: var(--sepia); background: var(--sepia-pale); }
+  .tone-option.selected { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+  .tone-option.selected .tone-desc { color: var(--sepia-light); }
+  .tone-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 3px;
+  }
+  .tone-desc { font-size: 12px; color: var(--sepia); font-style: italic; }
+
+  /* Roteiro output */
+  .roteiro-section { margin-top: 20px; }
+  .roteiro-section label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 12px;
+  }
+  .roteiro-generating {
+    display: none;
+    text-align: center;
+    padding: 32px;
+    font-style: italic;
+    color: var(--sepia);
+    border: 1px dashed var(--sepia-light);
+    margin-bottom: 16px;
+  }
+  .roteiro-generating.show { display: block; }
+  textarea#roteiro-output {
+    width: 100%;
+    min-height: 320px;
+    padding: 20px;
+    border: 1px solid var(--sepia-light);
+    background: white;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink);
+    outline: none;
+    resize: vertical;
+    display: none;
+  }
+  textarea#roteiro-output.show { display: block; }
+  textarea#roteiro-output:focus { border-color: var(--sepia); }
+
+  .roteiro-actions {
+    display: none;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .roteiro-actions.show { display: flex; }
+
+  /* Refresh button */
+  .btn-refresh {
+    background: none;
+    border: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    color: var(--sepia);
+    cursor: pointer;
+    letter-spacing: 1px;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+  .btn-refresh:hover { color: var(--ink); }
+
+  /* Editor link in main screen */
+  .btn-editor-link {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border: 1px dashed var(--sepia-light);
+    color: var(--sepia);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    font-family: 'Crimson Pro', serif;
+    width: 100%;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+  .btn-editor-link:hover { border-color: var(--sepia); background: var(--sepia-pale); color: var(--ink); }
+
   @media (max-width: 600px) {
     .agent-card { flex-wrap: wrap; }
     .agent-status { margin-left: 0; }
@@ -578,7 +834,87 @@
       <div id="history-list"></div>
     </div>
 
-    <footer>Projeto Valter · Cronista da Alma · Sprint 2</footer>
+    <button class="btn-editor-link" onclick="showScreen('editor')">✦ Área do Editor</button>
+    <footer>Projeto Valter · Cronista da Alma · Sprint 3</footer>
+  </div>
+
+  <!-- ── TELA 4: Editor ── -->
+  <div id="screen-editor">
+
+    <button class="btn-back" onclick="showScreen('main')">← Voltar à gravação</button>
+
+    <div class="editor-nav">
+      <button class="editor-tab active" id="tab-pendencias" onclick="switchTab('pendencias')">Pendências</button>
+      <button class="editor-tab" id="tab-roteiros" onclick="switchTab('roteiros')">Roteiros</button>
+    </div>
+
+    <!-- Tab: Pendências -->
+    <div class="editor-panel active" id="panel-pendencias">
+      <div class="pending-header">
+        <h2>Sessões <em>pendentes</em></h2>
+        <button class="btn-refresh" onclick="loadPendingSessions()">↻ Atualizar</button>
+      </div>
+      <div id="pending-list"><div class="pending-empty">Carregando sessões...</div></div>
+    </div>
+
+    <!-- Tab: Roteiros -->
+    <div class="editor-panel" id="panel-roteiros">
+      <div class="pending-header">
+        <h2>Gerar <em>roteiro</em></h2>
+      </div>
+
+      <div id="roteiro-session-info" style="padding:16px 20px;background:var(--paper-dark);border:1px solid var(--sepia-light);margin-bottom:20px;display:none;">
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--sepia);margin-bottom:4px;">História selecionada</div>
+        <div id="roteiro-session-name" style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;"></div>
+        <div id="roteiro-session-meta" style="font-size:12px;color:var(--sepia);margin-top:4px;"></div>
+      </div>
+
+      <div id="roteiro-no-session" style="padding:40px;text-align:center;font-style:italic;color:var(--sepia-light);border:1px dashed var(--sepia-light);">
+        Selecione uma sessão na aba Pendências para gerar o roteiro.
+      </div>
+
+      <div id="roteiro-form" style="display:none;">
+        <div class="tone-section">
+          <label>Tom do roteiro</label>
+          <div class="tone-grid">
+            <div class="tone-option selected" data-tone="cronica" onclick="selectTone(this)">
+              <div class="tone-name">Crônica Literária</div>
+              <div class="tone-desc">Prosa poética e reflexiva, estilo livro</div>
+            </div>
+            <div class="tone-option" data-tone="terapeutico" onclick="selectTone(this)">
+              <div class="tone-name">Relato Terapêutico</div>
+              <div class="tone-desc">Linguagem clínica acessível e educativa</div>
+            </div>
+            <div class="tone-option" data-tone="leve" onclick="selectTone(this)">
+              <div class="tone-name">Narrativa Leve</div>
+              <div class="tone-desc">Tom coloquial, ideal para redes sociais</div>
+            </div>
+            <div class="tone-option" data-tone="filosofico" onclick="selectTone(this)">
+              <div class="tone-name">Conto Filosófico</div>
+              <div class="tone-desc">Conexões com pensadores e conceitos</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" id="btn-gerar" onclick="gerarRoteiro()" style="width:100%;padding:16px;font-size:15px;letter-spacing:2px;">
+          Gerar Roteiro
+        </button>
+
+        <div class="roteiro-section">
+          <div class="roteiro-generating" id="roteiro-generating">
+            <span class="spinner"></span> O Curioso está escrevendo a história...
+          </div>
+          <label id="roteiro-output-label" style="display:none;">Roteiro gerado — edite livremente antes de salvar</label>
+          <textarea id="roteiro-output" placeholder="O roteiro aparecerá aqui..."></textarea>
+          <div class="roteiro-actions" id="roteiro-actions">
+            <button class="btn" onclick="salvarRoteiro()">Salvar na planilha</button>
+            <button class="btn btn-secondary" onclick="downloadRoteiro()">📄 Baixar .txt</button>
+            <button class="btn-refresh" onclick="gerarRoteiro()">↻ Gerar novamente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -743,6 +1079,11 @@ function showScreen(name) {
   document.getElementById('screen-login').style.display  = name === 'login'  ? 'block' : 'none';
   document.getElementById('screen-apikey').style.display = name === 'apikey' ? 'block' : 'none';
   document.getElementById('screen-main').style.display   = name === 'main'   ? 'block' : 'none';
+  document.getElementById('screen-editor').style.display = name === 'editor' ? 'block' : 'none';
+  if (name === 'editor') {
+    switchTab('pendencias');
+    loadPendingSessions();
+  }
 }
 
 function showMain() {
@@ -1335,6 +1676,234 @@ function resetSessionName() {
   var el = document.getElementById('session-name-input');
   if (el) el.value = '';
 }
+// ════════════════════════════════════════════════════════════════
+// EDITOR
+// ════════════════════════════════════════════════════════════════
+var editorSessions = [];
+var selectedSession = null;
+var selectedTone = 'cronica';
+
+var TONE_PROMPTS = {
+  cronica: 'Escreva uma cronica literaria em portugues brasileiro baseada nesta historia clinica. Use prosa poetica e reflexiva, linguagem literaria sofisticada mas acessivel, como um capitulo de livro de nao-ficcao narrativa. Preserve a essencia psicanalitica sem jargao excessivo. Aproximadamente 600-800 palavras.',
+  terapeutico: 'Escreva um relato terapeutico em portugues brasileiro baseado nesta historia clinica. Use linguagem clinica acessivel e educativa, adequada para um publico leigo interessado em saude mental. Explique os conceitos psicanaliticos de forma didatica. Aproximadamente 500-700 palavras.',
+  leve: 'Escreva uma narrativa leve em portugues brasileiro baseada nesta historia clinica. Use tom coloquial, envolvente e acessivel, adequado para redes sociais e leitores casuais. Sem jargao tecnico, foco na emocao e na identificacao humana. Aproximadamente 400-600 palavras.',
+  filosofico: 'Escreva um conto filosofico em portugues brasileiro baseado nesta historia clinica. Conecte a narrativa com conceitos de filosofos, pensadores ou grandes nomes da psicanalise (Freud, Jung, Winnicott, Lacan, Nietzsche, Sartre, etc). Reflexivo e profundo. Aproximadamente 600-800 palavras.'
+};
+
+function switchTab(tab) {
+  document.querySelectorAll('.editor-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.editor-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+function loadPendingSessions() {
+  document.getElementById('pending-list').innerHTML = '<div class="pending-empty"><span class="spinner"></span> Buscando sessoes na planilha...</div>';
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/' + SHEETS_ID + '/values/A2:J1000', {
+    headers: { 'Authorization': 'Bearer ' + accessToken }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var rows = data.values || [];
+    editorSessions = rows.map(function(row, idx) {
+      return {
+        rowIndex: idx + 2,
+        id: row[0] || '',
+        nome: row[1] || 'Sem titulo',
+        data_formatada: row[2] || '',
+        duracao: row[3] || '',
+        trocas: row[4] || '0',
+        status: row[5] || 'pendente',
+        usuario: row[6] || '',
+        transcript_raw: row[7] || '',
+        audio_url: row[8] || '',
+        roteiro: row[9] || ''
+      };
+    }).filter(function(s) { return s.id; });
+    renderPendingList();
+  })
+  .catch(function() {
+    document.getElementById('pending-list').innerHTML = '<div class="pending-empty">Erro ao carregar. Verifique sua conexao e tente novamente.</div>';
+  });
+}
+
+function renderPendingList() {
+  var list = document.getElementById('pending-list');
+  if (!editorSessions.length) {
+    list.innerHTML = '<div class="pending-empty">Nenhuma sessao encontrada na planilha.</div>';
+    return;
+  }
+  var sorted = editorSessions.slice().sort(function(a, b) {
+    if (a.status === 'pendente' && b.status !== 'pendente') return -1;
+    if (a.status !== 'pendente' && b.status === 'pendente') return 1;
+    return b.rowIndex - a.rowIndex;
+  });
+  list.innerHTML = sorted.map(function(s) {
+    var badgeClass = s.status === 'concluido' ? 'badge-concluido' : 'badge-pendente';
+    var transcriptLines = parseTranscript(s.transcript_raw);
+    return '<div class="pending-item" id="pi-' + s.rowIndex + '" onclick="togglePendingItem(' + s.rowIndex + ')">' +
+      '<div class="pending-item-header">' +
+        '<div class="pending-item-name">' + escHtml(s.nome) + '</div>' +
+        '<div class="pending-item-meta">' + escHtml(s.data_formatada) + '<br>' + (s.duracao || '-') + ' · ' + (s.trocas || 0) + ' trocas</div>' +
+        '<div class="badge ' + badgeClass + '">' + (s.status || 'pendente') + '</div>' +
+      '</div>' +
+      '<div class="pending-item-body">' +
+        '<div class="transcript-box">' + transcriptLines + '</div>' +
+        (s.audio_url ? '<p style="font-size:13px;color:var(--sepia);margin-bottom:16px;">Ouvir audio: <a href="' + s.audio_url + '" target="_blank" style="color:var(--sepia);">abrir no Drive</a></p>' : '') +
+        '<div style="display:flex;gap:10px;flex-wrap:wrap;">' +
+          '<button class="btn" onclick="abrirRoteiro(' + s.rowIndex + ');event.stopPropagation()">Gerar roteiro</button>' +
+          (s.roteiro ? '<button class="btn btn-secondary" onclick="verRoteiro(' + s.rowIndex + ');event.stopPropagation()">Ver roteiro existente</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function togglePendingItem(rowIndex) {
+  var el = document.getElementById('pi-' + rowIndex);
+  var isOpen = el.classList.contains('open');
+  document.querySelectorAll('.pending-item').forEach(function(i) { i.classList.remove('open', 'selected'); });
+  if (!isOpen) { el.classList.add('open', 'selected'); }
+}
+
+function parseTranscript(raw) {
+  if (!raw) return '<em style="color:var(--sepia-light)">Transcript nao disponivel.</em>';
+  var lines = raw.split(' | ');
+  return lines.map(function(line) {
+    var parts = line.match(/\[([^\]]+)\] ([^:]+): (.+)/);
+    if (!parts) return '';
+    var time = parts[1], role = parts[2].trim(), text = parts[3];
+    var rc = role === 'Valter' ? 'valter' : 'curioso';
+    return '<div class="transcript-line">' +
+      '<div class="transcript-role ' + rc + '">' + escHtml(role) + ' <span style="font-weight:300;opacity:0.6;">' + escHtml(time) + '</span></div>' +
+      '<div class="transcript-text ' + rc + '">' + escHtml(text) + '</div>' +
+    '</div>';
+  }).filter(Boolean).join('');
+}
+
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function abrirRoteiro(rowIndex) {
+  var session = editorSessions.find(function(s) { return s.rowIndex === rowIndex; });
+  if (!session) return;
+  selectedSession = session;
+  switchTab('roteiros');
+  document.getElementById('roteiro-session-info').style.display = 'block';
+  document.getElementById('roteiro-no-session').style.display = 'none';
+  document.getElementById('roteiro-form').style.display = 'block';
+  document.getElementById('roteiro-session-name').textContent = session.nome;
+  document.getElementById('roteiro-session-meta').textContent = session.data_formatada + ' · ' + session.duracao + ' · ' + session.trocas + ' trocas';
+  var out = document.getElementById('roteiro-output');
+  out.value = session.roteiro || '';
+  out.classList.toggle('show', !!session.roteiro);
+  document.getElementById('roteiro-output-label').style.display = session.roteiro ? 'block' : 'none';
+  document.getElementById('roteiro-actions').classList.toggle('show', !!session.roteiro);
+  document.getElementById('roteiro-generating').classList.remove('show');
+}
+
+function verRoteiro(rowIndex) { abrirRoteiro(rowIndex); }
+
+function selectTone(el) {
+  document.querySelectorAll('.tone-option').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedTone = el.getAttribute('data-tone');
+}
+
+function gerarRoteiro() {
+  if (!selectedSession) return;
+  var transcriptText = selectedSession.transcript_raw.replace(/ \| /g, '
+');
+  var prompt = 'Esta e a transcricao de uma conversa em que o psicanalista Valter conta uma historia clinica:
+
+' +
+    transcriptText + '
+
+' + TONE_PROMPTS[selectedTone] +
+    '
+
+IMPORTANTE: Preserve o sigilo — nao mencione nomes reais de pacientes. Use "o paciente", "ela", "ele" ou um nome ficticio.';
+
+  document.getElementById('roteiro-generating').classList.add('show');
+  document.getElementById('roteiro-output').classList.remove('show');
+  document.getElementById('roteiro-output-label').style.display = 'none';
+  document.getElementById('roteiro-actions').classList.remove('show');
+  document.getElementById('btn-gerar').disabled = true;
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    document.getElementById('btn-gerar').disabled = false;
+    document.getElementById('roteiro-generating').classList.remove('show');
+    if (data.error || !data.content) { alert('Erro ao gerar roteiro. Tente novamente.'); return; }
+    var roteiro = data.content[0].text;
+    var out = document.getElementById('roteiro-output');
+    out.value = roteiro;
+    out.classList.add('show');
+    document.getElementById('roteiro-output-label').style.display = 'block';
+    document.getElementById('roteiro-actions').classList.add('show');
+  })
+  .catch(function() {
+    document.getElementById('btn-gerar').disabled = false;
+    document.getElementById('roteiro-generating').classList.remove('show');
+    alert('Erro de conexao. Tente novamente.');
+  });
+}
+
+function salvarRoteiro() {
+  if (!selectedSession) return;
+  var roteiro = document.getElementById('roteiro-output').value;
+  if (!roteiro.trim()) return;
+  var range = 'F' + selectedSession.rowIndex + ':J' + selectedSession.rowIndex;
+  var values = [[ 'concluido', selectedSession.usuario, selectedSession.transcript_raw, selectedSession.audio_url, roteiro ]];
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/' + SHEETS_ID + '/values/' + range + '?valueInputOption=USER_ENTERED', {
+    method: 'PUT',
+    headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values: values })
+  })
+  .then(function(r) {
+    if (r.ok) {
+      selectedSession.roteiro = roteiro;
+      selectedSession.status = 'concluido';
+      // Update badge in list
+      var el = document.getElementById('pi-' + selectedSession.rowIndex);
+      if (el) {
+        var badge = el.querySelector('.badge');
+        if (badge) { badge.className = 'badge badge-concluido'; badge.textContent = 'concluido'; }
+      }
+      alert('Roteiro salvo! Status atualizado para concluido.');
+    } else { alert('Erro ao salvar. Tente novamente.'); }
+  })
+  .catch(function() { alert('Erro de conexao ao salvar.'); });
+}
+
+function downloadRoteiro() {
+  var roteiro = document.getElementById('roteiro-output').value;
+  if (!roteiro || !selectedSession) return;
+  var header = 'PROJETO VALTER - ROTEIRO
+========================
+Historia: ' + selectedSession.nome + '
+Data: ' + selectedSession.data_formatada + '
+Tom: ' + selectedTone + '
+
+';
+  var blob = new Blob([header + roteiro], { type: 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'roteiro_' + (selectedSession.id || 'valter') + '.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
 </script>
 </body>
 </html>
