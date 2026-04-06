@@ -428,6 +428,277 @@
   .history-item .hi-status.concluido { border-color: var(--green); color: var(--green); }
 
 
+
+  /* ── SPRINT 4: Conteúdo Digital + Mural ── */
+
+  /* Content cards grid */
+  .content-section { margin-bottom: 32px; }
+  .content-section-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sepia-light);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .content-grid { grid-template-columns: 1fr; } }
+
+  .content-card {
+    background: white;
+    border: 1px solid var(--sepia-light);
+    padding: 18px 20px;
+    position: relative;
+  }
+  .content-card-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .content-card-body {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    min-height: 60px;
+  }
+  .content-card-body.italic { font-style: italic; }
+  .content-card textarea {
+    width: 100%;
+    background: none;
+    border: none;
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    outline: none;
+    resize: none;
+    min-height: 80px;
+    padding: 0;
+  }
+  .btn-copy {
+    background: none;
+    border: 1px solid var(--sepia-light);
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--sepia);
+    cursor: pointer;
+    padding: 3px 8px;
+    transition: all 0.15s;
+  }
+  .btn-copy:hover { background: var(--sepia-pale); color: var(--ink); border-color: var(--sepia); }
+  .btn-copy.copied { background: var(--green); color: white; border-color: var(--green); }
+
+  /* Content source info */
+  .content-source-bar {
+    padding: 12px 20px;
+    background: var(--paper-dark);
+    border: 1px solid var(--sepia-light);
+    margin-bottom: 20px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .content-source-bar .source-name {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    flex: 1;
+  }
+
+  /* Platform toggle */
+  .platform-toggle {
+    display: flex;
+    gap: 0;
+    margin-bottom: 24px;
+    border: 1px solid var(--sepia-light);
+    width: fit-content;
+  }
+  .platform-btn {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    border-right: 1px solid var(--sepia-light);
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--sepia);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .platform-btn:last-child { border-right: none; }
+  .platform-btn.active { background: var(--ink); color: var(--paper); }
+  .platform-btn:hover:not(.active) { background: var(--sepia-pale); }
+
+  /* Cuts list */
+  .cuts-list { display: flex; flex-direction: column; gap: 10px; }
+  .cut-item {
+    background: white;
+    border: 1px solid var(--sepia-light);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .cut-time {
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--sepia);
+    white-space: nowrap;
+    padding-top: 2px;
+    min-width: 80px;
+  }
+  .cut-desc { font-size: 14px; line-height: 1.6; flex: 1; }
+  .cut-type {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--sepia-light);
+    color: var(--sepia);
+    white-space: nowrap;
+  }
+  .cut-type.short { border-color: var(--amber); color: var(--amber); }
+  .cut-type.longo { border-color: var(--green); color: var(--green); }
+
+  /* Mural de frases */
+  .frase-input-area {
+    background: var(--paper-dark);
+    border: 1px solid var(--sepia-light);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .frase-input-area label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 8px;
+  }
+  .frase-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .frase-input-row input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    border: 1px solid var(--sepia-light);
+    background: white;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink);
+    outline: none;
+  }
+  .frase-input-row input:focus { border-color: var(--sepia); }
+  .frase-input-row input.author-input {
+    flex: 0 0 200px;
+    font-style: normal;
+    font-size: 14px;
+  }
+
+  /* Frase cards */
+  .frase-card {
+    border: 1px solid var(--sepia-light);
+    margin-bottom: 16px;
+    background: white;
+  }
+  .frase-card-header {
+    padding: 16px 20px;
+    background: var(--paper-dark);
+    border-bottom: 1px solid var(--sepia-light);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    cursor: pointer;
+  }
+  .frase-quote {
+    flex: 1;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .frase-author {
+    font-size: 12px;
+    color: var(--sepia);
+    margin-top: 4px;
+    font-style: normal;
+  }
+  .frase-card-body {
+    display: none;
+    padding: 20px;
+  }
+  .frase-card.open .frase-card-body { display: block; }
+
+  .frase-suggestions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) { .frase-suggestions-grid { grid-template-columns: 1fr; } }
+
+  .frase-sugg-card {
+    background: var(--sepia-pale);
+    border: 1px solid var(--sepia-light);
+    padding: 14px 16px;
+  }
+  .frase-sugg-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--sepia);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .frase-sugg-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
+  .frase-generating {
+    display: none;
+    text-align: center;
+    padding: 24px;
+    font-style: italic;
+    color: var(--sepia);
+    font-size: 14px;
+  }
+  .frase-generating.show { display: block; }
+
+  /* No content placeholder */
+  .no-content-msg {
+    text-align: center;
+    padding: 40px 20px;
+    font-style: italic;
+    color: var(--sepia-light);
+    font-size: 15px;
+    border: 1px dashed var(--sepia-light);
+    margin-bottom: 20px;
+  }
+
   /* ── EDITOR SCREEN ─────────────────────────────────────────── */
   #screen-editor { display: none; }
 
@@ -846,6 +1117,8 @@
     <div class="editor-nav">
       <button class="editor-tab active" id="tab-pendencias" onclick="switchTab('pendencias')">Pendências</button>
       <button class="editor-tab" id="tab-roteiros" onclick="switchTab('roteiros')">Roteiros</button>
+      <button class="editor-tab" id="tab-conteudo" onclick="switchTab('conteudo')">Conteúdo Digital</button>
+      <button class="editor-tab" id="tab-mural" onclick="switchTab('mural')">Mural de Frases</button>
     </div>
 
     <!-- Tab: Pendências -->
@@ -913,6 +1186,129 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Tab: Conteúdo Digital -->
+    <div class="editor-panel" id="panel-conteudo">
+      <div class="pending-header">
+        <h2>Conteúdo <em>Digital</em></h2>
+        <button class="btn-refresh" onclick="gerarConteudo()">↻ Gerar novamente</button>
+      </div>
+
+      <div id="conteudo-no-roteiro" class="no-content-msg">
+        Gere um roteiro primeiro na aba Roteiros para criar conteúdo digital.
+      </div>
+
+      <div id="conteudo-area" style="display:none;">
+        <div class="content-source-bar">
+          <div class="source-name" id="conteudo-source-name">—</div>
+          <div class="badge badge-pendente" id="conteudo-source-tone">—</div>
+        </div>
+
+        <div class="platform-toggle">
+          <button class="platform-btn active" id="plat-youtube" onclick="switchPlatform('youtube')">▶ YouTube</button>
+          <button class="platform-btn" id="plat-instagram" onclick="switchPlatform('instagram')">◈ Instagram</button>
+        </div>
+
+        <div id="platform-youtube">
+          <div class="content-section">
+            <div class="content-section-title">Títulos com gancho</div>
+            <div class="content-grid" id="yt-titulos"></div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Descrição do vídeo</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Descrição completa
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="yt-descricao" rows="6"></textarea>
+            </div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Sugestões de cortes</div>
+            <div class="cuts-list" id="yt-cortes"></div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Tags</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Tags para o vídeo
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="yt-tags" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div id="platform-instagram" style="display:none;">
+          <div class="content-section">
+            <div class="content-section-title">Legenda para post / carrossel</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Legenda completa
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="ig-legenda" rows="8"></textarea>
+            </div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Gancho — primeiros 3 segundos do Reels</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Frase de abertura
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="ig-gancho" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Versão curta — carrossel (até 150 palavras)</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Texto do carrossel
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="ig-carrossel" rows="6"></textarea>
+            </div>
+          </div>
+          <div class="content-section">
+            <div class="content-section-title">Hashtags</div>
+            <div class="content-card">
+              <div class="content-card-label">
+                Hashtags sugeridas
+                <button class="btn-copy" onclick="copyCard(this)">Copiar</button>
+              </div>
+              <textarea id="ig-hashtags" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div id="conteudo-generating" style="display:none;text-align:center;padding:40px;font-style:italic;color:var(--sepia);">
+          <span class="spinner"></span> Gerando sugestões de conteúdo...
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Mural de Frases -->
+    <div class="editor-panel" id="panel-mural">
+      <div class="pending-header">
+        <h2>Mural de <em>Frases</em></h2>
+        <button class="btn-refresh" onclick="loadFrases()">↻ Atualizar</button>
+      </div>
+
+      <div class="frase-input-area">
+        <label>Adicionar nova frase</label>
+        <div class="frase-input-row">
+          <input type="text" id="frase-texto" placeholder="Digite ou cole a frase aqui..." />
+          <input type="text" class="author-input" id="frase-autor" placeholder="Autor" />
+        </div>
+        <button class="btn" onclick="adicionarFrase()" style="width:100%;padding:13px;letter-spacing:1px;">
+          Adicionar e gerar sugestões
+        </button>
+      </div>
+
+      <div id="frases-list"></div>
     </div>
 
   </div>
@@ -1690,12 +2086,7 @@ var TONE_PROMPTS = {
   filosofico: 'Escreva um conto filosofico em portugues brasileiro baseado nesta historia clinica. Conecte a narrativa com conceitos de filosofos, pensadores ou grandes nomes da psicanalise (Freud, Jung, Winnicott, Lacan, Nietzsche, Sartre, etc). Reflexivo e profundo. Aproximadamente 600-800 palavras.'
 };
 
-function switchTab(tab) {
-  document.querySelectorAll('.editor-tab').forEach(function(t) { t.classList.remove('active'); });
-  document.querySelectorAll('.editor-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.getElementById('panel-' + tab).classList.add('active');
-}
+
 
 function loadPendingSessions() {
   document.getElementById('pending-list').innerHTML = '<div class="pending-empty"><span class="spinner"></span> Buscando sessoes na planilha...</div>';
@@ -1889,6 +2280,329 @@ function downloadRoteiro() {
   var a = document.createElement('a');
   a.href = url; a.download = 'roteiro_' + (selectedSession.id || 'valter') + '.txt'; a.click();
   URL.revokeObjectURL(url);
+}
+
+// ════════════════════════════════════════════════════════════════
+// SPRINT 4 — CONTEÚDO DIGITAL
+// ════════════════════════════════════════════════════════════════
+var currentPlatform = 'youtube';
+var conteudoGerado = null;
+
+var TONE_LABELS = {
+  cronica: 'Crônica Literária',
+  terapeutico: 'Relato Terapêutico',
+  leve: 'Narrativa Leve',
+  filosofico: 'Conto Filosófico'
+};
+
+function switchTab(tab) {
+  document.querySelectorAll('.editor-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.editor-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'conteudo') initConteudoTab();
+  if (tab === 'mural') loadFrases();
+}
+
+function initConteudoTab() {
+  if (!selectedSession || !selectedSession.roteiro) {
+    document.getElementById('conteudo-no-roteiro').style.display = 'block';
+    document.getElementById('conteudo-area').style.display = 'none';
+    return;
+  }
+  document.getElementById('conteudo-no-roteiro').style.display = 'none';
+  document.getElementById('conteudo-area').style.display = 'block';
+  document.getElementById('conteudo-source-name').textContent = selectedSession.nome || 'Historia sem titulo';
+  document.getElementById('conteudo-source-tone').textContent = TONE_LABELS[selectedTone] || selectedTone;
+
+  if (!conteudoGerado || conteudoGerado.sessionId !== selectedSession.id) {
+    gerarConteudo();
+  }
+}
+
+function switchPlatform(plat) {
+  currentPlatform = plat;
+  document.getElementById('platform-youtube').style.display = plat === 'youtube' ? 'block' : 'none';
+  document.getElementById('platform-instagram').style.display = plat === 'instagram' ? 'block' : 'none';
+  document.querySelectorAll('.platform-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('plat-' + plat).classList.add('active');
+}
+
+function gerarConteudo() {
+  if (!selectedSession || !selectedSession.roteiro) return;
+
+  document.getElementById('conteudo-generating').style.display = 'block';
+  document.getElementById('platform-youtube').style.display = 'none';
+  document.getElementById('platform-instagram').style.display = 'none';
+  document.querySelectorAll('.platform-btn').forEach(function(b) { b.classList.remove('active'); });
+
+  var roteiro = document.getElementById('roteiro-output').value || selectedSession.roteiro;
+  var nomeSessao = selectedSession.nome || 'historia';
+
+  var promptConteudo = 'Voce e um especialista em marketing de conteudo digital para saude mental e psicanalise.' +
+    ' Com base neste roteiro, gere sugestoes de conteudo para YouTube e Instagram.' +
+    ' O canal e de Valter, um psicanalista experiente.' +
+    ' Responda APENAS em JSON valido, sem markdown, sem explicacoes, exatamente neste formato:' +
+    ' {"yt_titulos":["titulo1","titulo2","titulo3"],' +
+    '"yt_descricao":"descricao completa com quebras de linha",' +
+    '"yt_cortes":[{"tempo":"00:00-01:30","descricao":"descricao do trecho","tipo":"short"},{"tempo":"02:00-05:00","descricao":"descricao","tipo":"longo"}],' +
+    '"yt_tags":"tag1, tag2, tag3",' +
+    '"ig_legenda":"legenda completa com emojis e hashtags",' +
+    '"ig_gancho":"frase de abertura impactante para os primeiros 3 segundos",' +
+    '"ig_carrossel":"versao resumida em ate 150 palavras",' +
+    '"ig_hashtags":"#hashtag1 #hashtag2 #hashtag3"}' +
+    ' ROTEIRO: ' + roteiro.substring(0, 3000);
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2000,
+      messages: [{ role: 'user', content: promptConteudo }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    document.getElementById('conteudo-generating').style.display = 'none';
+    if (data.error || !data.content) { alert('Erro ao gerar conteudo. Tente novamente.'); return; }
+
+    var raw = data.content[0].text.replace(/```json|```/g, '').trim();
+    var json;
+    try { json = JSON.parse(raw); } catch(e) {
+      alert('Erro ao interpretar resposta. Tente novamente.');
+      console.log('Raw response:', raw);
+      return;
+    }
+
+    conteudoGerado = { sessionId: selectedSession.id, data: json };
+    renderConteudo(json);
+  })
+  .catch(function() {
+    document.getElementById('conteudo-generating').style.display = 'none';
+    alert('Erro de conexao. Tente novamente.');
+  });
+}
+
+function renderConteudo(json) {
+  // YouTube — títulos
+  var titGrid = document.getElementById('yt-titulos');
+  if (json.yt_titulos && titGrid) {
+    titGrid.innerHTML = json.yt_titulos.map(function(t) {
+      return '<div class="content-card">' +
+        '<div class="content-card-label">Opção <button class="btn-copy" onclick="copyCard(this)">Copiar</button></div>' +
+        '<div class="content-card-body">' + escHtml(t) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // YouTube — descrição
+  if (json.yt_descricao) setField('yt-descricao', json.yt_descricao);
+
+  // YouTube — cortes
+  var cortesEl = document.getElementById('yt-cortes');
+  if (json.yt_cortes && cortesEl) {
+    cortesEl.innerHTML = json.yt_cortes.map(function(c) {
+      return '<div class="cut-item">' +
+        '<div class="cut-time">' + escHtml(c.tempo || '') + '</div>' +
+        '<div class="cut-desc">' + escHtml(c.descricao || '') + '</div>' +
+        '<div class="cut-type ' + (c.tipo || '') + '">' + escHtml(c.tipo || '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // YouTube — tags
+  if (json.yt_tags) setField('yt-tags', json.yt_tags);
+
+  // Instagram
+  if (json.ig_legenda) setField('ig-legenda', json.ig_legenda);
+  if (json.ig_gancho) setField('ig-gancho', json.ig_gancho);
+  if (json.ig_carrossel) setField('ig-carrossel', json.ig_carrossel);
+  if (json.ig_hashtags) setField('ig-hashtags', json.ig_hashtags);
+
+  // Show YouTube by default
+  switchPlatform('youtube');
+}
+
+function setField(id, value) {
+  var el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
+function copyCard(btn) {
+  var card = btn.closest('.content-card');
+  var body = card.querySelector('textarea') || card.querySelector('.content-card-body');
+  var text = body ? (body.value || body.textContent || '').trim() : '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copiado!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copiado!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// SPRINT 4 — MURAL DE FRASES
+// ════════════════════════════════════════════════════════════════
+var frasesData = [];
+
+function loadFrases() {
+  // Load from localStorage for now (sheet integration in next sprint)
+  frasesData = JSON.parse(localStorage.getItem('valter_frases') || '[]');
+  renderFrases();
+}
+
+function renderFrases() {
+  var list = document.getElementById('frases-list');
+  if (!frasesData.length) {
+    list.innerHTML = '<div class="no-content-msg">Nenhuma frase adicionada ainda. Insira a primeira acima.</div>';
+    return;
+  }
+  var html = '';
+  var reversed = frasesData.slice().reverse();
+  reversed.forEach(function(f, i) {
+    var realIdx = frasesData.length - 1 - i;
+    var sugHtml = '';
+    if (f.sugestoes) {
+      sugHtml = '<div class="frase-suggestions-grid">' +
+        renderFraseSugg('Contexto de uso', f.sugestoes.contexto) +
+        renderFraseSugg('Historias que combinam', f.sugestoes.historias) +
+        renderFraseSugg('Prompt de imagem (Canva/Midjourney)', f.sugestoes.prompt_imagem) +
+        renderFraseSugg('Legenda para Instagram', f.sugestoes.legenda) +
+      '</div>';
+    } else if (f.gerando) {
+      sugHtml = '<div class="frase-generating show"><span class="spinner"></span> Gerando sugestoes...</div>';
+    } else {
+      sugHtml = '<button class="btn btn-secondary" style="margin-bottom:12px;" onclick="gerarSugestoesFrase(' + realIdx + ')">Gerar sugestoes</button>';
+    }
+    html += '<div class="frase-card open" id="frase-' + realIdx + '">' +
+      '<div class="frase-card-header" onclick="toggleFraseCard(' + realIdx + ')">' +
+        '<div>' +
+          '<div class="frase-quote">&ldquo;' + escHtml(f.texto) + '&rdquo;</div>' +
+          '<div class="frase-author">&mdash; ' + escHtml(f.autor || 'Autor desconhecido') + '</div>' +
+        '</div>' +
+        '<button class="btn-copy" onclick="copiarFrase(' + realIdx + ');event.stopPropagation()">Copiar</button>' +
+      '</div>' +
+      '<div class="frase-card-body">' + sugHtml + '</div>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderFraseSugg(label, text) {
+  if (!text) return '';
+  return '<div class="frase-sugg-card">' +
+    '<div class="frase-sugg-label">' + label +
+      '<button class="btn-copy" onclick="copyFraseSugg(this)">Copiar</button>' +
+    '</div>' +
+    '<div class="frase-sugg-text">' + escHtml(text) + '</div>' +
+  '</div>';
+}
+
+function copyFraseSugg(btn) {
+  var text = btn.closest('.frase-sugg-card').querySelector('.frase-sugg-text').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = 'Copiado!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function toggleFraseCard(idx) {
+  var card = document.getElementById('frase-' + idx);
+  if (card) card.classList.toggle('open');
+}
+
+function adicionarFrase() {
+  var texto = document.getElementById('frase-texto').value.trim();
+  var autor = document.getElementById('frase-autor').value.trim();
+  if (!texto) { alert('Digite a frase antes de adicionar.'); return; }
+
+  var novaFrase = { id: Date.now(), texto: texto, autor: autor, sugestoes: null, gerando: true };
+  frasesData.push(novaFrase);
+  saveFrases();
+  renderFrases();
+
+  document.getElementById('frase-texto').value = '';
+  document.getElementById('frase-autor').value = '';
+
+  gerarSugestoesFrase(frasesData.length - 1);
+}
+
+function gerarSugestoesFrase(idx) {
+  var frase = frasesData[idx];
+  if (!frase) return;
+  frase.gerando = true;
+  saveFrases();
+  renderFrases();
+
+  var historiasNomes = editorSessions.slice(-5).map(function(s) { return s.nome; }).join(', ') || 'nenhuma historia carregada ainda';
+
+  var prompt = 'Voce e um assistente criativo para o canal de psicanalise do Dr. Valter.' +
+    ' Com base na frase a seguir, gere sugestoes de uso para redes sociais.' +
+    ' Responda APENAS em JSON valido, sem markdown:' +
+    ' {"contexto":"quando e como usar esta frase, em qual tipo de post ou momento",' +
+    '"historias":"com qual tipo de historia clinica ou tema esta frase se conecta",' +
+    '"prompt_imagem":"prompt detalhado em portugues para gerar imagem no Canva ou Midjourney que combine com esta frase",' +
+    '"legenda":"legenda completa pronta para Instagram com emojis e 5 hashtags relevantes"}' +
+    ' FRASE: ' + frase.texto + ' — ' + (frase.autor || 'autor desconhecido') +
+    ' HISTORIAS DO VALTER (para referencia): ' + historiasNomes;
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    frase.gerando = false;
+    if (data.error || !data.content) { frase.sugestoes = null; saveFrases(); renderFrases(); return; }
+    var raw = data.content[0].text.replace(/```json|```/g, '').trim();
+    try {
+      frase.sugestoes = JSON.parse(raw);
+    } catch(e) { frase.sugestoes = null; }
+    saveFrases();
+    renderFrases();
+  })
+  .catch(function() {
+    frase.gerando = false;
+    saveFrases();
+    renderFrases();
+  });
+}
+
+function copiarFrase(idx) {
+  var frase = frasesData[idx];
+  if (!frase) return;
+  navigator.clipboard.writeText(frase.texto).catch(function() {});
+}
+
+function saveFrases() {
+  localStorage.setItem('valter_frases', JSON.stringify(frasesData));
 }
 
 </script>
