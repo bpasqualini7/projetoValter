@@ -1166,23 +1166,68 @@
               <div class="tone-name">Conto Filosófico</div>
               <div class="tone-desc">Conexões com pensadores e conceitos</div>
             </div>
+            <div class="tone-option" data-tone="drama" onclick="selectTone(this)">
+              <div class="tone-name">Drama</div>
+              <div class="tone-desc">Intensidade emocional e conflito humano</div>
+            </div>
+            <div class="tone-option" data-tone="comedia" onclick="selectTone(this)">
+              <div class="tone-name">Comédia</div>
+              <div class="tone-desc">Leveza e humor com profundidade humana</div>
+            </div>
+            <div class="tone-option" data-tone="romantico" onclick="selectTone(this)">
+              <div class="tone-name">Romântico</div>
+              <div class="tone-desc">Afeto, vínculos e encontros transformadores</div>
+            </div>
+            <div class="tone-option" data-tone="suspense" onclick="selectTone(this)">
+              <div class="tone-name">Suspense</div>
+              <div class="tone-desc">Revelação gradual, tensão e mistério</div>
+            </div>
           </div>
         </div>
 
         <button class="btn" id="btn-gerar" onclick="gerarRoteiro()" style="width:100%;padding:16px;font-size:15px;letter-spacing:2px;">
-          Gerar Roteiro
+          Gerar Roteiro — 1ª e 3ª Pessoa
         </button>
 
         <div class="roteiro-section">
           <div class="roteiro-generating" id="roteiro-generating">
-            <span class="spinner"></span> O Curioso está escrevendo a história...
+            <span class="spinner"></span> Gerando nas duas perspectivas...
           </div>
-          <label id="roteiro-output-label" style="display:none;">Roteiro gerado — edite livremente antes de salvar</label>
-          <textarea id="roteiro-output" placeholder="O roteiro aparecerá aqui..."></textarea>
-          <div class="roteiro-actions" id="roteiro-actions">
-            <button class="btn" onclick="salvarRoteiro()">Salvar na planilha</button>
-            <button class="btn btn-secondary" onclick="downloadRoteiro()">📄 Baixar .txt</button>
-            <button class="btn-refresh" onclick="gerarRoteiro()">↻ Gerar novamente</button>
+
+          <div id="roteiro-tabs-wrap" style="display:none;">
+            <div class="platform-toggle" style="margin-bottom:0;border-bottom:none;">
+              <button class="platform-btn active" id="rtab-1p" onclick="switchRoteiroTab('1p')">1ª Pessoa — Voz do Valter</button>
+              <button class="platform-btn" id="rtab-3p" onclick="switchRoteiroTab('3p')">3ª Pessoa — Narrador</button>
+            </div>
+
+            <div id="rpanel-1p">
+              <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--sepia);padding:12px 0 8px;">Edite livremente antes de salvar</label>
+              <textarea id="roteiro-output-1p" placeholder="Roteiro em 1ª pessoa..." style="width:100%;min-height:320px;padding:20px;border:1px solid var(--sepia-light);background:white;font-family:'Crimson Pro',serif;font-size:15px;line-height:1.8;color:var(--ink);outline:none;resize:vertical;"></textarea>
+              <div class="roteiro-actions show" style="margin-top:12px;">
+                <button class="btn" onclick="salvarRoteiro('1p')">Salvar na planilha</button>
+                <button class="btn btn-secondary" onclick="downloadRoteiro('1p')">📄 Baixar .txt</button>
+              </div>
+            </div>
+
+            <div id="rpanel-3p" style="display:none;">
+              <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--sepia);padding:12px 0 8px;">Edite livremente antes de salvar</label>
+              <textarea id="roteiro-output-3p" placeholder="Roteiro em 3ª pessoa..." style="width:100%;min-height:320px;padding:20px;border:1px solid var(--sepia-light);background:white;font-family:'Crimson Pro',serif;font-size:15px;line-height:1.8;color:var(--ink);outline:none;resize:vertical;"></textarea>
+              <div class="roteiro-actions show" style="margin-top:12px;">
+                <button class="btn" onclick="salvarRoteiro('3p')">Salvar na planilha</button>
+                <button class="btn btn-secondary" onclick="downloadRoteiro('3p')">📄 Baixar .txt</button>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;border-top:1px dashed var(--sepia-light);padding-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <button class="btn-refresh" onclick="gerarRoteiro()">↻ Gerar novamente</button>
+            </div>
+          </div>
+
+          <div id="roteiro-frases-sugeridas" style="display:none;margin-top:32px;">
+            <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--sepia);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--sepia-light);">
+              Frases que combinam com esta história
+            </div>
+            <div id="frases-sugeridas-list"></div>
           </div>
         </div>
       </div>
@@ -2134,7 +2179,17 @@ var TONE_PROMPTS = {
   cronica: 'Escreva uma cronica literaria em portugues brasileiro baseada nesta historia clinica. Use prosa poetica e reflexiva, linguagem literaria sofisticada mas acessivel, como um capitulo de livro de nao-ficcao narrativa. Preserve a essencia psicanalitica sem jargao excessivo. Aproximadamente 600-800 palavras.',
   terapeutico: 'Escreva um relato terapeutico em portugues brasileiro baseado nesta historia clinica. Use linguagem clinica acessivel e educativa, adequada para um publico leigo interessado em saude mental. Explique os conceitos psicanaliticos de forma didatica. Aproximadamente 500-700 palavras.',
   leve: 'Escreva uma narrativa leve em portugues brasileiro baseada nesta historia clinica. Use tom coloquial, envolvente e acessivel, adequado para redes sociais e leitores casuais. Sem jargao tecnico, foco na emocao e na identificacao humana. Aproximadamente 400-600 palavras.',
-  filosofico: 'Escreva um conto filosofico em portugues brasileiro baseado nesta historia clinica. Conecte a narrativa com conceitos de filosofos, pensadores ou grandes nomes da psicanalise (Freud, Jung, Winnicott, Lacan, Nietzsche, Sartre, etc). Reflexivo e profundo. Aproximadamente 600-800 palavras.'
+  filosofico: 'Escreva um conto filosofico em portugues brasileiro baseado nesta historia clinica. Conecte a narrativa com conceitos de filosofos, pensadores ou grandes nomes da psicanalise (Freud, Jung, Winnicott, Lacan, Nietzsche, Sartre, etc). Reflexivo e profundo. Aproximadamente 600-800 palavras.',
+  drama: 'Escreva um texto dramatico em portugues brasileiro baseado nesta historia clinica. Explore a intensidade emocional, o conflito interno e as tensoes humanas com linguagem expressiva e impactante. Momentos de ruptura, dor e transformacao devem ser vividamente retratados. Aproximadamente 600-800 palavras.',
+  comedia: 'Escreva um texto com tom comico e leveza em portugues brasileiro baseado nesta historia clinica. Use humor humano, situacoes ironicas e observacoes agudas sobre o comportamento humano, sem perder a profundidade psicanalitica. O riso deve vir do reconhecimento, nao da ridicularizacao. Aproximadamente 500-700 palavras.',
+  romantico: 'Escreva um texto com tom romantico em portugues brasileiro baseado nesta historia clinica. Foque nos vinculos afetivos, nos encontros transformadores, na delicadeza das emocoes e nos momentos de conexao humana profunda. Linguagem sensivel e poetica. Aproximadamente 600-800 palavras.',
+  suspense: 'Escreva um texto com tom de suspense em portugues brasileiro baseado nesta historia clinica. Use revelacao gradual, tensao crescente e o misterio da mente humana como fio condutor. O leitor deve querer descobrir o que acontece a seguir. Aproximadamente 600-800 palavras.'
+};
+
+var TONE_LABELS = {
+  cronica: 'Cronica Literaria', terapeutico: 'Relato Terapeutico',
+  leve: 'Narrativa Leve', filosofico: 'Conto Filosofico',
+  drama: 'Drama', comedia: 'Comedia', romantico: 'Romantico', suspense: 'Suspense'
 };
 
 
@@ -2237,12 +2292,18 @@ function abrirRoteiro(rowIndex) {
   document.getElementById('roteiro-form').style.display = 'block';
   document.getElementById('roteiro-session-name').textContent = session.nome;
   document.getElementById('roteiro-session-meta').textContent = session.data_formatada + ' · ' + session.duracao + ' · ' + session.trocas + ' trocas';
-  var out = document.getElementById('roteiro-output');
-  out.value = session.roteiro || '';
-  out.classList.toggle('show', !!session.roteiro);
-  document.getElementById('roteiro-output-label').style.display = session.roteiro ? 'block' : 'none';
-  document.getElementById('roteiro-actions').classList.toggle('show', !!session.roteiro);
   document.getElementById('roteiro-generating').classList.remove('show');
+  document.getElementById('roteiro-tabs-wrap').style.display = 'none';
+  document.getElementById('roteiro-frases-sugeridas').style.display = 'none';
+  // If session has a saved roteiro, show it in 3p tab
+  if (session.roteiro) {
+    var texto = session.roteiro.replace(/^\[1a pessoa\] |^\[3a pessoa\] /, '');
+    var is1p = session.roteiro.startsWith('[1a pessoa]');
+    document.getElementById('roteiro-output-1p').value = is1p ? texto : '';
+    document.getElementById('roteiro-output-3p').value = !is1p ? texto : '';
+    document.getElementById('roteiro-tabs-wrap').style.display = 'block';
+    switchRoteiroTab(is1p ? '1p' : '3p');
+  }
 }
 
 function verRoteiro(rowIndex) { abrirRoteiro(rowIndex); }
@@ -2253,19 +2314,14 @@ function selectTone(el) {
   selectedTone = el.getAttribute('data-tone');
 }
 
-function gerarRoteiro() {
-  if (!selectedSession) return;
-  var transcriptText = selectedSession.transcript_raw.replace(/ \| /g, '\n');
-  var intro = 'Esta e a transcricao de uma conversa em que o psicanalista Valter conta uma historia clinica:';
-  var instrucao = 'IMPORTANTE: Preserve o sigilo. Nao mencione nomes reais. Use o paciente, ela, ele ou nome ficticio.';
-  var prompt = intro + ' ' + transcriptText + ' ' + TONE_PROMPTS[selectedTone] + ' ' + instrucao;
+function switchRoteiroTab(tab) {
+  document.getElementById('rpanel-1p').style.display = tab === '1p' ? 'block' : 'none';
+  document.getElementById('rpanel-3p').style.display = tab === '3p' ? 'block' : 'none';
+  document.getElementById('rtab-1p').classList.toggle('active', tab === '1p');
+  document.getElementById('rtab-3p').classList.toggle('active', tab === '3p');
+}
 
-  document.getElementById('roteiro-generating').classList.add('show');
-  document.getElementById('roteiro-output').classList.remove('show');
-  document.getElementById('roteiro-output-label').style.display = 'none';
-  document.getElementById('roteiro-actions').classList.remove('show');
-  document.getElementById('btn-gerar').disabled = true;
-
+function callClaudeRoteiro(prompt, callback) {
   fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -2278,29 +2334,125 @@ function gerarRoteiro() {
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    document.getElementById('btn-gerar').disabled = false;
-    document.getElementById('roteiro-generating').classList.remove('show');
-    if (data.error || !data.content) { alert('Erro ao gerar roteiro. Tente novamente.'); return; }
-    var roteiro = data.content[0].text;
-    var out = document.getElementById('roteiro-output');
-    out.value = roteiro;
-    out.classList.add('show');
-    document.getElementById('roteiro-output-label').style.display = 'block';
-    document.getElementById('roteiro-actions').classList.add('show');
+    if (data.error || !data.content) callback(null);
+    else callback(data.content[0].text);
   })
-  .catch(function() {
-    document.getElementById('btn-gerar').disabled = false;
-    document.getElementById('roteiro-generating').classList.remove('show');
-    alert('Erro de conexao. Tente novamente.');
-  });
+  .catch(function() { callback(null); });
 }
 
-function salvarRoteiro() {
+function gerarRoteiro() {
   if (!selectedSession) return;
-  var roteiro = document.getElementById('roteiro-output').value;
-  if (!roteiro.trim()) return;
+
+  var transcriptText = selectedSession.transcript_raw.replace(/ \| /g, '\n');
+  var tomPrompt = TONE_PROMPTS[selectedTone] || TONE_PROMPTS.cronica;
+  var sigilo = 'IMPORTANTE: Preserve o sigilo. Nao mencione nomes reais. Use o paciente, ela, ele ou nome ficticio.';
+  var base = 'Esta e a transcricao de uma conversa em que o psicanalista Valter conta uma historia clinica: ' + transcriptText;
+
+  var prompt1p = base + ' ' + tamPrompt(tamPrompt) + ' Escreva em PRIMEIRA PESSOA, como se fosse o proprio Valter narrando a historia com sua voz, suas memorias e suas reflexoes pessoais. Use "eu", "meu paciente", "senti", "percebi". ' + sigilo;
+  var prompt3p = base + ' ' + tomPrompt + ' Escreva em TERCEIRA PESSOA, como um narrador externo que conta a historia do Valter e de seu paciente. Use "Valter", "o analista", "o paciente". ' + sigilo;
+
+  // Fix: use tomPrompt not tamPrompt
+  prompt1p = base + ' ' + tomPrompt + ' Escreva em PRIMEIRA PESSOA, como se fosse o proprio Valter narrando a historia com sua voz, suas memorias e suas reflexoes pessoais. Use "eu", "meu paciente", "senti", "percebi". ' + sigilo;
+
+  document.getElementById('roteiro-generating').classList.add('show');
+  document.getElementById('roteiro-tabs-wrap').style.display = 'none';
+  document.getElementById('roteiro-frases-sugeridas').style.display = 'none';
+  document.getElementById('btn-gerar').disabled = true;
+
+  var results = { p1: null, p3: null };
+
+  function checkDone() {
+    if (results.p1 === undefined || results.p3 === undefined) return;
+    document.getElementById('btn-gerar').disabled = false;
+    document.getElementById('roteiro-generating').classList.remove('show');
+
+    if (!results.p1 && !results.p3) { alert('Erro ao gerar roteiros. Tente novamente.'); return; }
+
+    document.getElementById('roteiro-output-1p').value = results.p1 || '';
+    document.getElementById('roteiro-output-3p').value = results.p3 || '';
+    document.getElementById('roteiro-tabs-wrap').style.display = 'block';
+    switchRoteiroTab('1p');
+
+    // Store for salvar/download
+    selectedSession._roteiro1p = results.p1 || '';
+    selectedSession._roteiro3p = results.p3 || '';
+
+    // Generate suggested quotes
+    gerarFrasesSugeridas(results.p3 || results.p1);
+  }
+
+  callClaudeRoteiro(prompt1p, function(text) { results.p1 = text; checkDone(); });
+  callClaudeRoteiro(prompt3p, function(text) { results.p3 = text; checkDone(); });
+}
+
+function gerarFrasesSugeridas(roteiro) {
+  if (!roteiro) return;
+  var prompt = 'Com base neste roteiro sobre psicanalise, sugira 6 citacoes de autores reais que combinam com o tema.'
+    + ' Inclua psicanalistas (Freud, Jung, Winnicott, Lacan, etc), filosofos e personalidades marcantes (Einstein, etc).'
+    + ' Responda APENAS em JSON valido, sem markdown:'
+    + ' [{"frase":"texto da citacao","autor":"Nome do Autor","motivo":"por que combina com esta historia em 1 frase"}]'
+    + ' ROTEIRO: ' + roteiro.substring(0, 2000);
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error || !data.content) return;
+    var raw = data.content[0].text.replace(/```json|```/g, '').trim();
+    var frases;
+    try { frases = JSON.parse(raw); } catch(e) { return; }
+    renderFrasesSugeridas(frases);
+  })
+  .catch(function() {});
+}
+
+function renderFrasesSugeridas(frases) {
+  if (!frases || !frases.length) return;
+  var wrap = document.getElementById('roteiro-frases-sugeridas');
+  var list = document.getElementById('frases-sugeridas-list');
+  list.innerHTML = frases.map(function(f, i) {
+    return '<div style="border:1px solid var(--sepia-light);margin-bottom:10px;background:white;">' +
+      '<div style="padding:14px 18px;background:var(--paper-dark);display:flex;align-items:flex-start;gap:14px;">' +
+        '<div style="flex:1;">' +
+          '<div style="font-family:Playfair Display,serif;font-size:15px;font-style:italic;margin-bottom:4px;">&ldquo;' + escHtml(f.frase) + '&rdquo;</div>' +
+          '<div style="font-size:12px;color:var(--sepia);">— ' + escHtml(f.autor) + '</div>' +
+          '<div style="font-size:12px;color:var(--sepia-light);margin-top:4px;font-style:italic;">' + escHtml(f.motivo) + '</div>' +
+        '</div>' +
+        '<button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;white-space:nowrap;" onclick="adicionarFraseSugerida(' + i + ')">+ Mural</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  wrap._frases = frases;
+  wrap.style.display = 'block';
+}
+
+function adicionarFraseSugerida(idx) {
+  var wrap = document.getElementById('roteiro-frases-sugeridas');
+  var frases = wrap._frases;
+  if (!frases || !frases[idx]) return;
+  var f = frases[idx];
+  frasesData.push({ id: Date.now() + idx, texto: f.frase, autor: f.autor, sugestoes: null, gerando: false });
+  saveFrases();
+  alert('Frase adicionada ao Mural! Va para a aba Mural de Frases para ver as sugestoes.');
+}
+
+function salvarRoteiro(perspectiva) {
+  if (!selectedSession) return;
+  var fieldId = perspectiva === '1p' ? 'roteiro-output-1p' : 'roteiro-output-3p';
+  var label = perspectiva === '1p' ? '[1a pessoa] ' : '[3a pessoa] ';
+  var roteiro = document.getElementById(fieldId).value;
+  if (!roteiro.trim()) { alert('Nenhum roteiro para salvar nesta perspectiva.'); return; }
+  var roteiroSalvo = label + roteiro;
   var range = 'F' + selectedSession.rowIndex + ':J' + selectedSession.rowIndex;
-  var values = [[ 'concluido', selectedSession.usuario, selectedSession.transcript_raw, selectedSession.audio_url, roteiro ]];
+  var values = [[ 'concluido', selectedSession.usuario, selectedSession.transcript_raw, selectedSession.audio_url, roteiroSalvo ]];
   fetch('https://sheets.googleapis.com/v4/spreadsheets/' + SHEETS_ID + '/values/' + range + '?valueInputOption=USER_ENTERED', {
     method: 'PUT',
     headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
@@ -2308,28 +2460,32 @@ function salvarRoteiro() {
   })
   .then(function(r) {
     if (r.ok) {
-      selectedSession.roteiro = roteiro;
+      selectedSession.roteiro = roteiroSalvo;
       selectedSession.status = 'concluido';
-      // Update badge in list
       var el = document.getElementById('pi-' + selectedSession.rowIndex);
       if (el) {
         var badge = el.querySelector('.badge');
         if (badge) { badge.className = 'badge badge-concluido'; badge.textContent = 'concluido'; }
       }
-      alert('Roteiro salvo! Status atualizado para concluido.');
+      alert('Roteiro (' + (perspectiva === '1p' ? '1a pessoa' : '3a pessoa') + ') salvo na planilha!');
     } else { alert('Erro ao salvar. Tente novamente.'); }
   })
   .catch(function() { alert('Erro de conexao ao salvar.'); });
 }
 
-function downloadRoteiro() {
-  var roteiro = document.getElementById('roteiro-output').value;
-  if (!roteiro || !selectedSession) return;
-  var header = 'PROJETO VALTER - ROTEIRO\n========================\nHistoria: ' + selectedSession.nome + ' Data: ' + selectedSession.data_formatada + ' Tom: ' + selectedTone + '\n\n';
+function downloadRoteiro(perspectiva) {
+  if (!selectedSession) return;
+  var fieldId = perspectiva === '1p' ? 'roteiro-output-1p' : 'roteiro-output-3p';
+  var roteiro = document.getElementById(fieldId).value;
+  if (!roteiro) return;
+  var label = perspectiva === '1p' ? '1a_pessoa' : '3a_pessoa';
+  var header = 'PROJETO VALTER - ROTEIRO (' + label + ')\n==========================================\nHistoria: ' + (selectedSession.nome || '') + '\nData: ' + (selectedSession.data_formatada || '') + '\nTom: ' + (TONE_LABELS[selectedTone] || selectedTone) + '\nPerspectiva: ' + (perspectiva === '1p' ? '1a Pessoa' : '3a Pessoa') + '\n\n';
   var blob = new Blob([header + roteiro], { type: 'text/plain;charset=utf-8' });
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
-  a.href = url; a.download = 'roteiro_' + (selectedSession.id || 'valter') + '.txt'; a.click();
+  a.href = url;
+  a.download = 'roteiro_' + label + '_' + (selectedSession.id || 'valter') + '.txt';
+  a.click();
   URL.revokeObjectURL(url);
 }
 
