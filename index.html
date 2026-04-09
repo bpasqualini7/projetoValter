@@ -1537,14 +1537,15 @@ function showMain() {
   ensureSheetHeaders();
   getOrCreateDriveFolder();
   loadHistory();
-  // Request mic permission first, then init everything
+  // Request mic permission upfront (silent — just to prime the browser)
+  // Session only starts when Valter clicks the play button
   requestMicPermission(function(granted) {
     if (!granted) {
       document.getElementById('mic-warning').classList.add('show');
     }
     initSpeechRecognition();
-    startGreeting();
   });
+  showReadyState();
 }
 
 function requestMicPermission(callback) {
@@ -1835,9 +1836,32 @@ function initSpeechRecognition() {
   recognition.onend = function() { if (isRecording && !isPaused) recognition.start(); };
 }
 
+function showReadyState() {
+  document.getElementById('mic-label').textContent = 'Iniciar sessão';
+  document.getElementById('mic-btn').classList.remove('recording');
+  setStatus('Pronto', '');
+  document.getElementById('live-transcript').textContent = 'Clique em Iniciar sessão para começar.';
+}
+
+var sessionStarted = false;
+
 function toggleMic() {
   if (isSpeaking || isPaused) return;
+  // First click starts the session
+  if (!sessionStarted) {
+    startSession();
+    return;
+  }
   if (!isRecording) startRecording(); else stopRecording();
+}
+
+function startSession() {
+  sessionStarted = true;
+  document.getElementById('mic-label').textContent = 'Aguarde...';
+  document.getElementById('btn-gerar') && null; // no-op
+  setStatus('Pensando', 'pensando');
+  // Greet first, then start recording after greeting ends
+  startGreeting();
 }
 
 function startRecording() {
@@ -2100,7 +2124,9 @@ function endSession() {
       isPaused = false;
       resetSessionName();
       loadHistory();
-      addMessage('agent', 'Sessão encerrada e salva. Quando quiser contar outra história, é só começar!');
+      sessionStarted = false;
+      showReadyState();
+      addMessage('agent', 'Sessão encerrada e salva. Quando quiser contar outra história, clique em Iniciar sessão.');
     });
   }
 
